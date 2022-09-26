@@ -18,6 +18,8 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class HelloActivity extends Activity {
+    private static final long DOUBLE_CLICK_TIME = 300;
+    long lastClickTime = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,13 +44,8 @@ public class HelloActivity extends Activity {
 
                 EditText login = new EditText(HelloActivity.this);
                 login.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-                login.setHint("Login");
+                login.setHint("Text");
                 layout.addView(login);
-
-                EditText password = new EditText(HelloActivity.this);
-                password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                password.setHint("Password");
-                layout.addView(password);
 
                 alertDialog.setView(layout);
                 alertDialog.setButton("Save", new DialogInterface.OnClickListener() {
@@ -60,19 +57,15 @@ public class HelloActivity extends Activity {
             }
         });
 
-        textList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+        textList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id){
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 AlertDialog alertDialog = new AlertDialog.Builder(HelloActivity.this).create();
                 alertDialog.setTitle("Delete");
 
                 LinearLayout layout = new LinearLayout(HelloActivity.this);
                 layout.setOrientation(LinearLayout.VERTICAL);
-
-//                alertDialog.setButton("Cancel", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {}
-//                });
-
+                
                 alertDialog.setButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         myStringArray.remove(position);
@@ -82,6 +75,19 @@ public class HelloActivity extends Activity {
                 alertDialog.show();
 
                 return false;
+            }
+
+        });
+
+        textList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                long clickTime = System.currentTimeMillis();
+                if (clickTime - lastClickTime < DOUBLE_CLICK_TIME) {
+                    myStringArray.remove(position);
+                    TextAdapter.notifyDataSetChanged();
+                }
+                lastClickTime=clickTime;
             }
         });
     }
