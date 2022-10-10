@@ -28,10 +28,12 @@ public class HelloActivity extends Activity {
         ArrayList<String> myStringArray = new ArrayList<String>();
         myStringArray.add("dqdq");
         myStringArray.add("dqdas1231q");
+        Bundle arguments = getIntent().getExtras();
+        String str = arguments.get("hello").toString();
+        myStringArray.add(str);
         ListView textList = findViewById(R.id.textList);
         ArrayAdapter<String> TextAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, myStringArray);
         textList.setAdapter(TextAdapter);
-
         Button buttonAdd = findViewById(R.id.buttonAdd);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +67,7 @@ public class HelloActivity extends Activity {
 
                 LinearLayout layout = new LinearLayout(HelloActivity.this);
                 layout.setOrientation(LinearLayout.VERTICAL);
-                
+
                 alertDialog.setButton("Delete", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         myStringArray.remove(position);
@@ -87,7 +89,7 @@ public class HelloActivity extends Activity {
                     myStringArray.remove(position);
                     TextAdapter.notifyDataSetChanged();
                 }
-                lastClickTime=clickTime;
+                lastClickTime = clickTime;
             }
         });
     }
