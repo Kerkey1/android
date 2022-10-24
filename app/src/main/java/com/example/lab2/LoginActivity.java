@@ -6,20 +6,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginact);
-
-        String loginState = "123";
         String passwordState = "123";
 
         Button buttonLogin = findViewById(R.id.ButtonLogin);
+
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -27,7 +31,7 @@ public class LoginActivity extends Activity {
                 EditText password = findViewById(R.id.PasswordField);
                 if (passwordState.equals(password.getText().toString())) {
                     Intent myIntent = new Intent(LoginActivity.this, HelloActivity.class);
-                    myIntent.putExtra("hello", login.getText().toString());
+                    myIntent.putExtra("user", login.getText().toString());
                     startActivity(myIntent);
                 }
             }

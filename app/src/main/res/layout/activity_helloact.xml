@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/BlockBack"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:background="@color/black">-->
-
-<!--        <Button-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="50dp"/>-->
-<!--    </RelativeLayout>-->
 
     <ListView
         android:id="@+id/textList"
@@ -34,13 +24,15 @@
             android:layout_alignParentBottom="true"
             android:text="Добавить" />
 
-        <!--        <Button-->
-        <!--            android:id="@+id/buttonDelete"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_alignParentEnd="true"-->
-        <!--            android:layout_alignParentBottom="true"-->
-        <!--            android:text="Удалить" />-->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_compat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="dark mode"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            />
     </RelativeLayout>
 
 </RelativeLayout>
