@@ -21,6 +21,9 @@
         <activity
             android:name=".HelloActivity"
             android:exported="true" />
+        <activity
+            android:name=".UserProfile"
+            android:exported="true" />
     </application>
 
 </manifest>

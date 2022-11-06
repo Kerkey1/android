@@ -1,52 +1,63 @@
 package com.example.lab2;
 
-import android.app.Activity;
+import static com.example.lab2.DBContract.Users.TABLE_NAME;
+import static java.lang.Math.random;
+import static kotlin.random.RandomKt.Random;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.SwitchCompat;
+
+import java.util.List;
+
 
 public class LoginActivity extends AppCompatActivity {
+    DBHandler db = new DBHandler(this);
+    DepartmentHandler depDB = new DepartmentHandler(this);
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginact);
-        String passwordState = "123";
-
         Button buttonLogin = findViewById(R.id.ButtonLogin);
+        Button buttonLogUp = findViewById(R.id.button_log_up);
+        TextView login = findViewById(R.id.LoginField);
+        TextView password = findViewById(R.id.PasswordField);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText login = findViewById(R.id.LoginField);
-                EditText password = findViewById(R.id.PasswordField);
-                if (passwordState.equals(password.getText().toString())) {
-                    Intent myIntent = new Intent(LoginActivity.this, HelloActivity.class);
-                    myIntent.putExtra("user", login.getText().toString());
+                String saveLogin = login.getText().toString();
+                int isExist = db.isUser(saveLogin, password.getText().toString());
+                if (isExist != -1) {
+                    Intent myIntent = new Intent(LoginActivity.this, UserProfile.class);
+                    myIntent.putExtra("user", saveLogin);
+                    myIntent.putExtra("id", isExist);
                     startActivity(myIntent);
                 }
             }
-
         });
 
-        Button buttonViewTable = findViewById(R.id.ButtonViewTable);
-        buttonViewTable.setOnClickListener(new View.OnClickListener() {
+        buttonLogUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(LoginActivity.this, HelloActivity.class);
-                startActivity(myIntent);
+                int isExist = db.getId(login.getText().toString());
+                int count = depDB.getAllDepartments().size();
+                int rand = 1 + (int) (Math.random() * count);
+                if (isExist == -1) {
+                    db.addUser(new User(login.getText().toString(), password.getText().toString(), rand));
+                }
             }
-
         });
+
     }
 
     @Override
@@ -64,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        db.close();
         Log.i("AppLogger", "onPause");
     }
 
