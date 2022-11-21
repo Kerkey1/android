@@ -35,26 +35,64 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String saveLogin = login.getText().toString();
-                int isExist = db.isUser(saveLogin, password.getText().toString());
-                if (isExist != -1) {
-                    Intent myIntent = new Intent(LoginActivity.this, UserProfile.class);
-                    myIntent.putExtra("user", saveLogin);
-                    myIntent.putExtra("id", isExist);
-                    startActivity(myIntent);
-                }
+                buttonLogin.setEnabled(false);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String saveLogin = login.getText().toString();
+                        int isExist = db.isUser(saveLogin, password.getText().toString());
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (isExist != -1) {
+                            Intent myIntent = new Intent(LoginActivity.this, UserProfile.class);
+                            myIntent.putExtra("user", saveLogin);
+                            myIntent.putExtra("id", isExist);
+                            startActivity(myIntent);
+                        }
+
+                        buttonLogin.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                buttonLogin.setEnabled(true);
+                            }
+                        });
+
+                    }
+                }).start();
             }
         });
 
         buttonLogUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int isExist = db.getId(login.getText().toString());
-                int count = depDB.getAllDepartments().size();
-                int rand = 1 + (int) (Math.random() * count);
-                if (isExist == -1) {
-                    db.addUser(new User(login.getText().toString(), password.getText().toString(), rand));
-                }
+                buttonLogUp.setEnabled(false);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int isExist = db.getId(login.getText().toString());
+                        int count = depDB.getAllDepartments().size();
+                        int rand = 1 + (int) (Math.random() * count);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (isExist == -1) {
+                            db.addUser(new User(login.getText().toString(), password.getText().toString(), rand));
+                        }
+
+                        buttonLogUp.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                buttonLogUp.setEnabled(true);
+                            }
+                        });
+
+                    }
+                }).start();
             }
         });
 
